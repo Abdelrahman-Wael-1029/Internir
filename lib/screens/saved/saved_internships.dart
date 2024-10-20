@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:internir/components/job_card.dart';
-import 'package:internir/providers/jobs_provider.dart';
-import 'package:internir/utils/app_color.dart';
-import 'package:internir/utils/size_config.dart';
+import '../../components/saved_job_card.dart';
+import '../../models/job_model.dart';
+import '../../providers/jobs_provider.dart';
+import '../../providers/saved_jobs_provider.dart';
+import '../../utils/app_color.dart';
+import '../../utils/size_config.dart';
 import 'package:provider/provider.dart';
 
 class SavedInternships extends StatefulWidget {
@@ -16,88 +18,80 @@ class _SavedInternshipsState extends State<SavedInternships> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _fetchSavedInternships();
-    });
-  }
-
-  Future<void> _fetchSavedInternships() async {
-    try {} catch (error) {
-      debugPrint(error.toString());
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final jobsProvider = context.watch<JobsProvider>();
+    final savedJobsProvider = context.watch<JobSaveProvider>();
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'My Saved Internships',
-          style: TextStyle(
-            color: AppColor.mainBlue,
-            fontSize: 30 * SizeConfig.textRatio,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Greta Arabic',
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: AppColor.mainBlue),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.background,
+        body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 16 * SizeConfig.horizontalBlock,
             vertical: 20 * SizeConfig.verticalBlock,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              /*
-              jobsProvider.loading
-                  ? const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(),
-                ),
-              )
-                  : jobsProvider.jobs.isNotEmpty
-                  ? ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: jobsProvider.jobs.length,
-                itemBuilder: (context, index) {
-                  final job = jobsProvider.jobs[index];
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 16 * SizeConfig.verticalBlock,
-                      ),
-                      jobCard(job),
-                      SizedBox(
-                        height: 16 * SizeConfig.verticalBlock,
-                      ),
-                    ],
-                  );
-                },
-              )
-                  : Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    'No saved internships found',
+              SizedBox(height: 20 * SizeConfig.verticalBlock),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'My Saved Internships',
                     style: TextStyle(
-                      fontFamily: 'Greta Arabic',
-                      fontSize: 16 * SizeConfig.textRatio,
+                      color: AppColor.mainBlue,
+                      fontSize: 25 * SizeConfig.textRatio,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NotoSans',
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 16 * SizeConfig.verticalBlock),
+              Expanded(
+                child: savedJobsProvider.savedJobs.isEmpty
+                    ? Center(
+                  child: Text(
+                    "No saved internships.",
+                    style: TextStyle(
+                      fontFamily: 'NotoSans',
+                      fontSize: 16 * SizeConfig.textRatio,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+                    : ListView.builder(
+                  itemCount: savedJobsProvider.savedJobs.length,
+                  itemBuilder: (context, index) {
+                    final jobId = savedJobsProvider.savedJobs[index];
+                    final job = jobsProvider.jobs.firstWhere(
+                          (job) => job.id == jobId,
+                      orElse: () => JobModel(
+                        id: '',
+                        title: '',
+                        company: '',
+                        description: '',
+                        salary: null,
+                        location: '',
+                        createdAt: DateTime.now(),
+                        category: null,
+                        numberOfApplicants: 0,
+                        enabled: false,
+                      ),
+                    );
+                    return Column(
+                      children: [
+                        SizedBox(height: 16 * SizeConfig.verticalBlock),
+                        savedJobCard(job, context),
+                        SizedBox(height: 16 * SizeConfig.verticalBlock),
+                      ],
+                    );
+                  },
                 ),
               ),
-            */
             ],
           ),
         ),

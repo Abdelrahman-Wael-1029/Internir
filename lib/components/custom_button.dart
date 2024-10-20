@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:internir/utils/app_color.dart';
+import '../utils/app_color.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget {
   final EdgeInsets? padding;
   final FontWeight? fontWeight;
   final double? borderRadius;
-  final bool   isDisable;
+  final bool isDisable;
 
   const CustomButton({
     super.key,
@@ -43,7 +43,7 @@ class CustomButton extends StatelessWidget {
             padding: EdgeInsets.zero,
             side: BorderSide(color: borderColor ?? Colors.transparent),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 25),
+                borderRadius: BorderRadius.circular(borderRadius ?? 15),
                 side: BorderSide(color: borderColor ?? Colors.transparent)),
             shadowColor: Colors.transparent),
         child: Padding(
@@ -54,6 +54,7 @@ class CustomButton extends StatelessWidget {
               color: textColor,
               fontSize: fontSize ?? 16,
               fontWeight: fontWeight ?? FontWeight.w500,
+              fontFamily: 'NotoSans',
             ),
           ),
         ),

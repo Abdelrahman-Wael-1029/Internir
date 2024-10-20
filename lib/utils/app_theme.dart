@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:internir/utils/app_color.dart';
+import 'app_color.dart';
 
 ThemeData themeData = ThemeData(
   colorScheme: ColorScheme.fromSeed(

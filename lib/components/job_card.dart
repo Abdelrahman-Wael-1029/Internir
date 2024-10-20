@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:internir/components/custom_button.dart';
-import 'package:internir/models/job_model.dart';
-import 'package:internir/utils/app_color.dart';
-import 'package:internir/utils/size_config.dart';
+import 'package:internir/screens/apply/apply_screen.dart';
+import 'custom_button.dart';
+import '../models/job_model.dart';
+import '../utils/app_color.dart';
+import '../utils/size_config.dart';
 
-Widget jobCard(JobModel job, {bool isApplied = false}) {
+Widget jobCard(JobModel job, BuildContext context, {bool isApplied = false}) {
   return Container(
     padding: EdgeInsets.symmetric(
       horizontal: 16 * SizeConfig.horizontalBlock,
@@ -124,29 +125,68 @@ Widget jobCard(JobModel job, {bool isApplied = false}) {
                         color: AppColor.grey1,
                       ),
                     ),
-                  // calc time from create at to now
-                  Text(
-                    "Posted: ${job.createdAt.year}-${job.createdAt.month}-${job.createdAt.day}",
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12 * SizeConfig.textRatio,
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.grey1,
-                    ),
+                  SizedBox(
+                    height: 4 * SizeConfig.verticalBlock,
                   ),
+                  if (DateTime.now().difference(job.createdAt).inDays < 2)
+                    Text(
+                      "Posted ${DateTime.now().difference(job.createdAt).inHours} Hours Ago",
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12 * SizeConfig.textRatio,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.grey1,
+                      ),
+                    ),
+                  if (DateTime.now().difference(job.createdAt).inDays >= 2)
+                    Text(
+                      "Posted ${DateTime.now().difference(job.createdAt).inDays} Days Ago",
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12 * SizeConfig.textRatio,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.grey1,
+                      ),
+                    ),
                 ],
               ),
             ),
             SizedBox(
               width: 16 * SizeConfig.horizontalBlock,
             ),
-            CustomButton(
+            (isApplied)
+                ? CustomButton(
+              text: "Know More",
+              width: 160 * SizeConfig.horizontalBlock,
+              height: 40 * SizeConfig.verticalBlock,
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  ApplyScreen.routeName,
+                  arguments: job,
+                );
+              },
+              backgroundColor: AppColor.lightBlue,
+              textColor: Colors.white,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16 * SizeConfig.horizontalBlock,
+                vertical: 8 * SizeConfig.verticalBlock,
+              ),
+              fontSize: 14 * SizeConfig.textRatio,
+            )
+                : CustomButton(
               text: "Apply",
               width: 100 * SizeConfig.horizontalBlock,
               height: 40 * SizeConfig.verticalBlock,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  ApplyScreen.routeName,
+                  arguments: job,
+                );
+              },
               backgroundColor: AppColor.lightBlue,
               textColor: Colors.white,
               padding: EdgeInsets.symmetric(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-class Onecategory extends StatefulWidget {
-  const Onecategory({super.key});
+class OneCategory extends StatefulWidget {
+  const OneCategory({super.key});
 
   @override
-  State<Onecategory> createState() => _OnecategoryState();
+  State<OneCategory> createState() => _OneCategoryState();
 }
 
-class _OnecategoryState extends State<Onecategory> {
+class _OneCategoryState extends State<OneCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

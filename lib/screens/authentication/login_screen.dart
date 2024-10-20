@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:internir/screens/layout/home_layout.dart';
+import 'package:provider/provider.dart';
+import '../../providers/jobs_provider.dart';
 import 'create_account.dart';
 import 'package:internir/screens/home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = '/login';
+
   const LoginScreen({super.key});
 
   @override
@@ -29,17 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Logged in successfully!")),
       );
 
-
-      Navigator.pushReplacement(
+      var jobProvider = context.read<JobsProvider>();
+      await jobProvider.fetchJobs();
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const HomeLayout()),
+        (route) => false,
       );
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to log in: ${e.toString()}")),
@@ -137,24 +141,24 @@ class _LoginScreenState extends State<LoginScreen> {
             _isLoading
                 ? const CircularProgressIndicator()
                 : SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor: Colors.indigo,
-                ),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    fontFamily: 'Greta Arabic',
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        backgroundColor: Colors.indigo,
+                      ),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontFamily: 'Greta Arabic',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
             const SizedBox(height: 20),
             Center(
               child: TextButton(
@@ -173,4 +177,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
