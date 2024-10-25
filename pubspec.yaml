@@ -33,25 +33,19 @@ dependencies:
   cupertino_icons: ^1.0.6
   firebase_core: ^3.5.0
   cloud_firestore: ^5.4.2
-  firebase_storage: ^12.3.2
+  firebase_storage: ^12.3.1
   firebase_messaging: ^15.1.2
   firebase_auth: ^5.3.0
   flutter_svg: ^2.0.10+1
   hive_flutter: ^1.1.0
   hive: ^2.2.3
   provider: ^6.1.2
-  timezone: ^0.9.4
-  geolocator: ^13.0.1
-  flutter_quill: ^10.8.2
-  file_picker: ^8.1.2
   http: ^1.2.2
   html: ^0.15.4
+  file_picker: ^5.2.4
+  flutter_quill: ^10.8.5
   image_picker: ^1.1.2
-  path_provider: ^2.1.4
-  url_launcher: ^6.3.1
-  intl: ^0.19.0
   syncfusion_flutter_pdfviewer: ^27.1.56
-  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
