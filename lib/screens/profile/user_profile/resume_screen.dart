@@ -18,7 +18,7 @@ class ResumePage extends StatefulWidget {
 
 class _ResumePageState extends State<ResumePage> {
   List<String> uploadedFileUrls = [];
-  List<File> uploadedFiles = []; // Change this to a list of File objects
+  List<File> uploadedFiles = [];
   final currentUser = FirebaseAuth.instance.currentUser;
 
   @override
