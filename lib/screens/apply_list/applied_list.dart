@@ -10,6 +10,8 @@ import '../../utils/size_config.dart';
 class ApplyListScreen extends StatefulWidget {
   const ApplyListScreen({super.key});
 
+  static const String routeName = 'appliedList';
+
   @override
   State<ApplyListScreen> createState() => _ApplyListScreenState();
 }
@@ -22,7 +24,9 @@ class _ApplyListScreenState extends State<ApplyListScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     _loadAppliedJobs();
+    });
   }
 
   Future<void> _loadAppliedJobs() async {

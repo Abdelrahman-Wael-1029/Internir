@@ -103,7 +103,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
                       child: Image(
                         image: NetworkImage(
                           _companyImage ??
-                              'https://dummyimage.com/300x200/000/fff',
+                              'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg',
                         ),
                         fit: BoxFit.cover,
                         width: 104,

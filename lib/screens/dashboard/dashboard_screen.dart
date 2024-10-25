@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:internir/screens/applications/applications.dart';
+import 'package:internir/screens/profile/admin/admin_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -47,7 +51,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var companyProvider = Provider.of<CompanyProvider>(context);
     var companyAuthProvider = Provider.of<CompnayAuthProvider>(context);
 
-    // Fallback values for company name and image
     String name = companyAuthProvider.company.name.isNotEmpty
         ? companyAuthProvider.company.name
         : "Loading...";
@@ -75,12 +78,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           SizedBox(width: 10 * SizeConfig.horizontalBlock),
-          CircleAvatar(
-            backgroundImage: (companyImage != null && companyImage.isNotEmpty)
-                ? NetworkImage(
-                    companyImage,
-                  )
-                : const AssetImage(AppAssets.noProfileImage), // Fallback image
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AdminProfileScreen()));
+            },
+            child: CircleAvatar(
+              backgroundImage: (companyImage != null && companyImage.isNotEmpty)
+                  ? NetworkImage(
+                      companyImage,
+                    )
+                  : const AssetImage(
+                      AppAssets.noProfileImage), // Fallback image
+            ),
           ),
           SizedBox(width: 10 * SizeConfig.horizontalBlock),
         ],
@@ -91,12 +103,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                },
-                icon: Icon(Icons.logout),
-              ),
               Text(
                 'All Internships',
                 style: TextStyle(
@@ -182,9 +188,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     onChanged: (value) {
                                       selectedCategory.text = value.toString();
                                     },
-                                    // initial value
-                                    value: selectedCategory.text =
-                                        listCategories[0],
                                     style: TextStyle(
                                       fontSize: 16 * SizeConfig.textRatio,
                                       fontFamily: 'NotoSans',
@@ -408,7 +411,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       salaryController.text,
                                                     )
                                                   : null,
-                                          category: selectedCategory.text,
+                                          category:
+                                              selectedCategory.text.isEmpty
+                                                  ? null
+                                                  : selectedCategory.text,
                                           employmentType:
                                               employmentTypeController
                                                       .text.isNotEmpty
@@ -445,26 +451,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('Internship title')),
-                        DataColumn(label: Text('Location')),
-                        DataColumn(label: Text('Number of applicants')),
-                        DataColumn(label: Text('Actions')),
+                      border: TableBorder.all(),
+                      horizontalMargin: 5 * SizeConfig.horizontalBlock,
+                      headingRowColor:
+                          MaterialStateProperty.all(AppColor.mainBlue),
+                      columnSpacing: 12 * SizeConfig.textRatio,
+                      columns: [
+                        DataColumn(
+                            headingRowAlignment: MainAxisAlignment.center,
+                            label: Text(
+                              'Internship title',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.white,
+                                  fontSize: 16 * SizeConfig.textRatio,
+                                  fontFamily: 'NotoSans'),
+                            )),
+                        DataColumn(
+                            headingRowAlignment: MainAxisAlignment.center,
+                            label: Text(
+                              'Location',
+                              style: TextStyle(
+                                  color: AppColor.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16 * SizeConfig.textRatio,
+                                  fontFamily: 'NotoSans'),
+                            )),
+                        DataColumn(
+                            headingRowAlignment: MainAxisAlignment.center,
+                            label: Text(
+                              'N applicants',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.white,
+                                  fontSize: 16 * SizeConfig.textRatio,
+                                  fontFamily: 'NotoSans'),
+                            )),
+                        DataColumn(
+                            headingRowAlignment: MainAxisAlignment.center,
+                            label: Text(
+                              'Actions',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.white,
+                                  fontSize: 16 * SizeConfig.textRatio,
+                                  fontFamily: 'NotoSans'),
+                            )),
                       ],
                       rows: companyProvider.jobs.map((job) {
                         return DataRow(cells: [
-                          DataCell(Text(job.title)),
-                          DataCell(Text(job.location)),
-                          DataCell(Text(job.numberOfApplicants.toString())),
+                          DataCell(Text(
+                            job.title,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14 * SizeConfig.textRatio,
+                                fontFamily: 'NotoSans'),
+                          )),
+                          DataCell(Text(
+                            job.location,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14 * SizeConfig.textRatio,
+                                fontFamily: 'NotoSans'),
+                          )),
+                          DataCell(Text(
+                            job.numberOfApplicants.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14 * SizeConfig.textRatio,
+                                fontFamily: 'NotoSans'),
+                          )),
                           DataCell(
                             ElevatedButton(
                               onPressed: () {
+                                print(job);
                                 companyProvider.selectedJob = job;
+                                print(companyProvider.selectedJob);
                                 Navigator.pushNamed(
                                     context, Applications.routeName);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.mainBlue,
+                                backgroundColor: AppColor.mainGreen,
                               ),
                               child: const Text(
                                 'View Internship',

@@ -61,38 +61,40 @@ class JobModel {
     };
   }
 
-  JobModel copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? location,
-    double? salary,
-    String? category,
-    String? jobType,
-    String? company,
-    DateTime? createdAt,
-    int? numberOfApplicants,
-    bool? enabled,
-    String? companyID
-  }) {
+  JobModel copyWith(
+      {String? id,
+      String? title,
+      String? description,
+      String? location,
+      double? salary,
+      String? category,
+      String? jobType,
+      String? company,
+      DateTime? createdAt,
+      int? numberOfApplicants,
+      bool? enabled,
+      String? companyID}) {
     return JobModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      location: location ?? this.location,
-      salary: salary ?? this.salary,
-      category: category ?? this.category,
-      company: company ?? this.company,
-      jobType: jobType ?? this.jobType,
-      createdAt: createdAt ?? this.createdAt,
-      numberOfApplicants: numberOfApplicants ?? this.numberOfApplicants,
-      enabled: enabled ?? this.enabled,
-      companyID: companyID ?? this.companyID
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        location: location ?? this.location,
+        salary: salary ?? this.salary,
+        category: category ?? this.category,
+        company: company ?? this.company,
+        jobType: jobType ?? this.jobType,
+        createdAt: createdAt ?? this.createdAt,
+        numberOfApplicants: numberOfApplicants ?? this.numberOfApplicants,
+        enabled: enabled ?? this.enabled,
+        companyID: companyID ?? this.companyID);
   }
 
   @override
   String toString() {
-    return 'JobModel{id: $id, title: $title, description: $description, location: $location, salary: $salary, category: $category, jobType: $jobType, company: $company, createdAt: $createdAt, numberOfApplicants: $numberOfApplicants, enabled: $enabled, companyID: $companyID}';
+    return 'JobModel{id: $id, title: $title, description: $description,'
+        ' location: $location, salary: $salary, category: $category,'
+        ' jobType: $jobType, company: $company, createdAt: $createdAt,'
+        ' numberOfApplicants: $numberOfApplicants, enabled: $enabled,'
+        ' companyID: $companyID}';
   }
 }

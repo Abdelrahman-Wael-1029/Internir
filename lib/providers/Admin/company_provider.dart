@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:internir/models/application_model.dart';
 import '../../models/company_model.dart';
 import '../../models/job_model.dart';
@@ -35,7 +34,7 @@ class CompanyProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('$e fetchApplications');
     } finally {
       loading = false;
       notifyListeners();
@@ -48,6 +47,8 @@ class CompanyProvider extends ChangeNotifier {
     try {
       loading = true;
       notifyListeners();
+
+      jobs.clear();
       var myJobs = await FirebaseFirestore.instance
           .collection('company')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -61,7 +62,7 @@ class CompanyProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('$e fetchJobs');
     } finally {
       loading = false;
       notifyListeners();
@@ -129,11 +130,18 @@ class CompanyProvider extends ChangeNotifier {
     try {
       loading = true;
       notifyListeners();
+      // create At in firebase
       await FireDatabase.updateData(
         'jobs',
         job.id,
-        job.toJson(),
+        job.toJson().map((key, value) {
+          if (key == 'createdAt') {
+            return MapEntry(key, Timestamp.fromDate(job.createdAt));
+          }
+          return MapEntry(key, value);
+        }),
       );
+      selectedJob = job;
       fetchJobs();
     } catch (e) {
       debugPrint(e.toString());
@@ -174,11 +182,11 @@ class CompanyProvider extends ChangeNotifier {
           .doc(companyId)
           .collection('jobs')
           .doc(selectedJob!.id)
-          .collection('applications').
-          doc(application.userId).
-          update({'status': s});
+          .collection('applications')
+          .doc(application.userId)
+          .update({'status': s});
 
-    notifyListeners();
+      notifyListeners();
     } catch (e) {
       debugPrint(e.toString());
       application.status = last;

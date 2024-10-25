@@ -1,70 +1,19 @@
-import 'dart:io';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-
+import 'package:internir/utils/size_config.dart';
+import 'package:intl/intl.dart';
 import '../../../utils/app_color.dart';
-import '../../../utils/size_config.dart';
 
-class MyPdf extends StatefulWidget {
+class MyPdf extends StatelessWidget {
   const MyPdf({
     super.key,
-    required this.file,
+    required this.fileName,
+    required this.lastModified,
     required this.onDelete,
   });
-  final File file;
+
+  final String fileName;
+  final DateTime lastModified;
   final VoidCallback onDelete;
-
-  @override
-  State<MyPdf> createState() => _MyPdfState();
-}
-
-class _MyPdfState extends State<MyPdf> {
- DateTime? lastModified;
-
-  @override
-  void initState() {
-    super.initState();
-    _lastModifiedDate(); // Get the file modification date when the widget initializes
-  }
-
-
-  //---- Function to show the confirmation dialog ----\\
-  Future<void> _showDeleteConfirmation() async {
-    bool? result = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Delete Confirmation"),
-          content: const Text("Are you sure you want to delete this PDF?"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // Return false (cancel)
-              },
-              child: const Text("No"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true); // Return true (confirm)
-              },
-              child: const Text("Yes"),
-            ),
-          ],
-        );
-      },
-    );
-    if (result == true) {
-      widget.onDelete();
-    }
-  }
-
-  //----Function to get the last modification date of the file----\\
-  Future<void> _lastModifiedDate() async {
-    final fileStat = await widget.file.stat(); // Get file metadata
-    setState(() {
-      lastModified = fileStat.modified; // Set the modification date
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,16 +28,16 @@ class _MyPdfState extends State<MyPdf> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                widget.file.path.split('/').last,
+                fileName,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(lastModified != null
-                  ? 'Last Updated: ${DateFormat('yyyy-MM-dd').format(lastModified!)}'
-                  : 'Loading...', // Show date or loading
-                style: const TextStyle(fontSize: 14, color: Colors.grey),),
+              Text(
+                'Last Modified: ${DateFormat('yyyy-MM-dd').format(lastModified)}',
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+              ),
             ],
           ),
           IconButton(
@@ -97,9 +46,9 @@ class _MyPdfState extends State<MyPdf> {
               color: AppColor.red,
               size: 30,
             ),
-            onPressed: _showDeleteConfirmation, // Show dialog when pressed
+            onPressed: onDelete,
           ),
-          SizedBox(height: SizeConfig.screenHeight * 0.1,)
+          SizedBox(height: SizeConfig.screenHeight * 0.1),
         ],
       ),
     );

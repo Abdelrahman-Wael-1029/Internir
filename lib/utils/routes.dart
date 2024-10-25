@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:internir/screens/applications/applications.dart';
+import 'package:internir/components/pdf_viewer.dart';
 import '../screens/authentication/admin/company_sign_up.dart';
 import '../screens/authentication/create_account.dart';
 import '../screens/authentication/login_screen.dart';
@@ -46,6 +47,9 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const Categories());
       case Applications.routeName:
         return MaterialPageRoute(builder: (_) => const Applications());
+      case PdfViewer.routeName:
+        final pdfUrl = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => PdfViewer(pdfUrl: pdfUrl));
 
       default:
         return MaterialPageRoute(builder: (_) => errorRoute());

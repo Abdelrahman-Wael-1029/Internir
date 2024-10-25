@@ -6,6 +6,7 @@ import '../screens/category/one_category.dart';
 import '../utils/app_color.dart';
 import '../utils/size_config.dart';
 
+
 Widget categoryCard({
   required String category,
   required BuildContext context,

@@ -4,7 +4,6 @@ import '../authentication/login_screen.dart';
 import '../../utils/app_assets.dart';
 import '../../utils/app_color.dart';
 import '../../utils/size_config.dart';
-import '../layout/home_layout.dart';
 import 'package:provider/provider.dart';
 import '../../providers/onboarding_provider.dart';
 

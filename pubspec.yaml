@@ -48,17 +48,30 @@ dependencies:
   path_provider: ^2.1.4
   url_launcher: ^6.3.1
   intl: ^0.19.0
+  syncfusion_flutter_pdfviewer: ^27.1.55
 
 dev_dependencies:
+  flutter_lints: ^3.0.0
+
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.1
+
+flutter_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/Internir.jpg"
+  web: 
+    generate: true
+    image_path: "assets/images/Internir.jpg"
+    background_color: "#ffffff"
+    theme_color: "#0000ff"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,6 +88,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/Internir.jpg
   fonts:
     - family: NotoSans
       fonts:

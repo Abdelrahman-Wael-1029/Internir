@@ -6,11 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
 import 'package:internir/constants/constants.dart';
-import 'package:internir/providers/jobs_provider.dart';
 import 'package:internir/screens/authentication/login_screen.dart';
 import 'package:internir/screens/layout/home_layout.dart';
-import 'package:provider/provider.dart';
+import 'package:internir/providers/jobs_provider.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const String routeName = '/create-account';
@@ -37,7 +38,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController();
 
   final List<String> genderOptions = [
     'Male',
@@ -69,7 +70,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         });
 
         UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -105,7 +106,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           MaterialPageRoute(
             builder: (_) => const HomeLayout(),
           ),
-          (route) => false,
+              (route) => false,
         );
       } on FirebaseAuthException catch (e) {
         String errorMessage = '';
@@ -171,7 +172,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     if (pickedDate != null) {
       setState(() {
         _dobController.text =
-            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-"
+        "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-"
             "${pickedDate.day.toString().padLeft(2, '0')}";
       });
     }
@@ -196,7 +197,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     TextSpan(
                       text: "Create ",
                       style: TextStyle(
-                        fontFamily: 'NotoSans',
+                        fontFamily: 'Greta Arabic',
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -205,7 +206,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     TextSpan(
                       text: "Account",
                       style: TextStyle(
-                        fontFamily: 'NotoSans',
+                        fontFamily: 'Greta Arabic',
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Colors.indigo,
@@ -219,7 +220,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const Text(
                 "Create an account so you can explore all the existing jobs",
                 style: TextStyle(
-                  fontFamily: 'NotoSans',
+                  fontFamily: 'Greta Arabic',
                   fontSize: 16,
                   color: Colors.grey,
                 ),
@@ -261,7 +262,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   backgroundImage: selectedImage != null
                       ? FileImage(selectedImage!)
                       : const AssetImage('assets/images/profile.png')
-                          as ImageProvider,
+                  as ImageProvider,
                   child: const Align(
                     alignment: Alignment.bottomRight,
                     child: Icon(
@@ -460,9 +461,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 },
                 items: genderOptions
                     .map((gender) => DropdownMenuItem<String>(
-                          value: gender,
-                          child: Text(gender),
-                        ))
+                  value: gender,
+                  child: Text(gender),
+                ))
                     .toList(),
                 validator: (value) {
                   if (value == null) {
@@ -515,17 +516,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: _isLoading
                     ? const CircularProgressIndicator()
                     : const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          'Create Account',
-                          style: TextStyle(
-                            fontFamily: 'NotoSans',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Create Account',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

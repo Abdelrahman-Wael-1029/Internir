@@ -5,6 +5,7 @@ import 'package:internir/components/custom_text_form_field.dart';
 import 'package:internir/constants/constants.dart';
 import 'package:internir/models/job_model.dart';
 import 'package:internir/providers/Admin/company_provider.dart';
+import 'package:internir/components/pdf_viewer.dart';
 import 'package:internir/utils/app_color.dart';
 import 'package:internir/utils/size_config.dart';
 import 'package:internir/utils/utils.dart';
@@ -26,10 +27,13 @@ class _ApplicationsState extends State<Applications> {
       var companyProvider =
           Provider.of<CompanyProvider>(context, listen: false);
       companyProvider.fetchApplications();
+      print(companyProvider.selectedJob!.title);
       titleController.text = companyProvider.selectedJob!.title;
       selectedCategory.text = companyProvider.selectedJob!.category ?? '';
       locationController.text = companyProvider.selectedJob!.location;
-      salaryController.text = companyProvider.selectedJob!.salary.toString();
+      salaryController.text = (companyProvider.selectedJob!.salary != null)
+          ? companyProvider.selectedJob!.salary.toString()
+          : '';
       employmentTypeController.text =
           companyProvider.selectedJob!.jobType ?? '';
       descriptionController = QuillController(
@@ -54,7 +58,9 @@ class _ApplicationsState extends State<Applications> {
   Widget build(BuildContext context) {
     var companyProvider = Provider.of<CompanyProvider>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(surfaceTintColor: Colors.transparent, backgroundColor: AppColor.background,
+
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -201,8 +207,10 @@ class _ApplicationsState extends State<Applications> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
+                    horizontalMargin: 5 * SizeConfig.horizontalBlock,
                     headingRowColor:
                         MaterialStateProperty.all(AppColor.mainBlue),
+                    columnSpacing: 12 * SizeConfig.textRatio,
                     border: TableBorder.all(
                         color: AppColor.black,
                         borderRadius: BorderRadius.circular(8),
@@ -210,8 +218,9 @@ class _ApplicationsState extends State<Applications> {
                         style: BorderStyle.solid),
                     columns: [
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'applied name',
+                          'Applied Name',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -222,8 +231,9 @@ class _ApplicationsState extends State<Applications> {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'applied email',
+                          'Applied Nmail',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -234,8 +244,9 @@ class _ApplicationsState extends State<Applications> {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'applied phone',
+                          'Applied Phone',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -246,8 +257,9 @@ class _ApplicationsState extends State<Applications> {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'applied date',
+                          'Applied Date',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -258,8 +270,9 @@ class _ApplicationsState extends State<Applications> {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'status',
+                          'Atatus',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -270,8 +283,22 @@ class _ApplicationsState extends State<Applications> {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
-                          'action',
+                          'Resume',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColor.white,
+                            fontFamily: 'NotoSans',
+                            fontSize: 16 * SizeConfig.textRatio,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
+                        label: Text(
+                          'Actions',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColor.white,
@@ -314,18 +341,34 @@ class _ApplicationsState extends State<Applications> {
                             fontSize: 14 * SizeConfig.textRatio,
                           ),
                         )),
-                        DataCell(Text(
-                          application.status,
-                          style: TextStyle(
-                            fontFamily: 'NotoSans',
-                            fontSize: 14 * SizeConfig.textRatio,
+                        DataCell(
+                          Text(
+                            application.status,
+                            style: TextStyle(
+                              fontFamily: 'NotoSans',
+                              fontSize: 14 * SizeConfig.textRatio,
+                            ),
                           ),
-                        )),
+                        ),
+                        DataCell(
+                          CustomButton(
+                            fontSize: 14 * SizeConfig.textRatio,
+                              text: 'View Resume',
+                              textColor: AppColor.lightBlue,
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  PdfViewer.routeName,
+                                  arguments: application.resume,
+                                );
+                              }),
+                        ),
                         DataCell(
                           Row(
                             children: [
                               CustomButton(
                                   text: 'Approve',
+                                  fontSize: 14 * SizeConfig.textRatio,
                                   textColor: AppColor.mainGreen,
                                   onPressed: () {
                                     companyProvider.updateStatus(
@@ -336,6 +379,7 @@ class _ApplicationsState extends State<Applications> {
                               ),
                               CustomButton(
                                   text: 'Reject',
+                            fontSize: 14 * SizeConfig.textRatio,
                                   textColor: AppColor.red,
                                   onPressed: () {
                                     companyProvider.updateStatus(
@@ -649,28 +693,24 @@ class _ApplicationsState extends State<Applications> {
                                                 listen: false);
 
                                         companyProvider.updateJob(
-                                          job: JobModel.fromJson(
-                                            {
-                                              'title': titleController.text,
-                                              'description': encodeQuillContent(
-                                                  descriptionController),
-                                              'location':
-                                                  locationController.text,
-                                              'salary': salaryController
-                                                      .text.isNotEmpty
-                                                  ? double.parse(
-                                                      salaryController.text,
-                                                    )
-                                                  : null,
-                                              'category': selectedCategory.text,
-                                              'employmentType':
-                                                  employmentTypeController
-                                                          .text.isNotEmpty
-                                                      ? employmentTypeController
-                                                          .text
-                                                      : null,
-                                              'enabled': enabled,
-                                            },
+                                          job: companyProvider.selectedJob!
+                                              .copyWith(
+                                            title: titleController.text,
+                                            description: encodeQuillContent(
+                                                descriptionController),
+                                            location: locationController.text,
+                                            salary:
+                                                salaryController.text.isNotEmpty
+                                                    ? double.parse(
+                                                        salaryController.text,
+                                                      )
+                                                    : null,
+                                            category: selectedCategory.text,
+                                            jobType: employmentTypeController
+                                                    .text.isNotEmpty
+                                                ? employmentTypeController.text
+                                                : null,
+                                            enabled: enabled,
                                           ),
                                         );
                                         Navigator.pop(context);
@@ -714,6 +754,7 @@ class _ApplicationsState extends State<Applications> {
                                 Navigator.pop(context);
                                 companyProvider
                                     .deleteJob(companyProvider.selectedJob!.id);
+                                Navigator.pop(context);
                               },
                               child: const Text('Delete',
                                   style: TextStyle(color: Colors.red)),

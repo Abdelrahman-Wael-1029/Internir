@@ -90,6 +90,7 @@ class CompnayAuthProvider with ChangeNotifier {
           path: 'company/${company.id}',
           fileName: 'profile.png',
           file: localImage!,
+          contentType: 'image/png',
         );
         isLocalImage = false;
       }
@@ -127,6 +128,7 @@ class CompnayAuthProvider with ChangeNotifier {
           path: 'company/$uid',
           fileName: 'profile.png',
           file: localImage!,
+          contentType: 'image/png',
         );
         isLocalImage = false;
       }

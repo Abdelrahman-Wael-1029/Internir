@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'providers/Admin/company_auth_provider.dart';
 import 'providers/category_provider.dart';
@@ -20,6 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await FirebaseAuth.instance.signOut();
   runApp(
     MultiProvider(
       providers: [
